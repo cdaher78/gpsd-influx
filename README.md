@@ -28,7 +28,7 @@ This script can be run as a daemon to collect information from a GPS and push it
 ## InfluxDB
 Installation instructions for InfluxDB: https://docs.influxdata.com/influxdb/v2.3/install/
 
-Once you have Influx installed, create your organization, a bucket and and API token:
+Once you have Influx installed, create your organization, a bucket and an API token:
 
 ## gpsd
 
