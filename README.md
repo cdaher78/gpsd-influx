@@ -54,7 +54,7 @@ DEVICES="/dev/ttyUSB0"
 
 # If using a serial GPS
 DEVICES="dev/ttyAMA0"
-USBAUTOR"false"
+USBAUTO"false"
 
 # Other options you want to pass to gpsd
 GPSD_OPTIONS=""
