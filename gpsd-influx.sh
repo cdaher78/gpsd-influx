@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Your Influxdb Server
-INFLUX_URL="http://192.168.7.53:8086"
+INFLUX_URL="Your Influxdb Server"
 # Your Influxdb Organization
-YOUR_ORG="wls-lab"
+YOUR_ORG="Your Influxdb Organization"
 # Your Influxdb Bucket
-YOUR_BUCKET="gpsd"
+YOUR_BUCKET="Your Influxdb Bucket"
 # Your API Token
-YOUR_API_TOKEN="qgL8U79lYsZcoTEbj487peHclA8QjWmZDZqwHPnMcqxgCCRRej01Zg2LWiF6IrfWT1in_oPkQDQGXGrNq5Fv4w=="
+YOUR_API_TOKEN="Your API Token"
 # Number of seconds between updates
 update_interval=10
 
