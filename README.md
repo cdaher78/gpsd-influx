@@ -13,7 +13,7 @@ This script can be run as a daemon to collect information from a GPS and push it
 
 # Requirements
 * A serial GPS
-* A dedicated computer to run the daemon on (I use a Raspberry Pi B)
+* A dedicated computer to run the daemon on (using a Raspberry Pi 4B)
 * gpsd (http://www.catb.org/gpsd/)
 * InfluxDB (https://www.influxdata.com/)
 * Python
@@ -21,9 +21,8 @@ This script can be run as a daemon to collect information from a GPS and push it
 # Optional
 * Grafana for visualizing the data (https://grafana.com/)
 
-# Todo
-- [ ] Create Docker Image
-- [x] Re-write script in Python (done but needs testing)
+# To do
+- [x] Develop bash script to write data to Influxdb using new API curl method and topology (org, bucket, token)
 
 # Installation
 ## InfluxDB
@@ -35,8 +34,8 @@ Once you have Influx installed, create your organization, a bucket and an API to
 
 Debian based install
 ```
-apt-get update
-apt-get install -y gpsd
+apt update
+apt install -y gpsd
 ```
 
 Once it is intalled, make sure to edit */etc/default/gpsd* and change the *DEVICES* line to match the device for your GPS, ex:
@@ -52,6 +51,10 @@ USBAUTO="true"
 # Devices gpsd should collect to at boot time.
 # They need to be read/writeable, either by user gpsd or the group dialout.
 DEVICES="/dev/ttyUSB0"
+
+# If using a serial GPS
+DEVICES="dev/ttyAMA0"
+USBAUTO"false"
 
 # Other options you want to pass to gpsd
 GPSD_OPTIONS=""
@@ -151,6 +154,9 @@ ExecStart=/opt/gpsd-influx/gpsd-influx.sh
 KillMode=process
 Restart=on-failure
 User=root
+
+StandardOutput=append:/var/log/gpsd-influx.log
+StandardError=append:/var/log/gpsd-influx.log
 
 [Install]
 WantedBy=multi-user.target
