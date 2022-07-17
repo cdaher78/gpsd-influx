@@ -13,7 +13,7 @@ This script can be run as a daemon to collect information from a GPS and push it
 
 # Requirements
 * A serial GPS
-* A dedicated computer to run the daemon on (I use a Raspberry Pi B)
+* A dedicated computer to run the daemon on (using a Raspberry Pi 4B)
 * gpsd (http://www.catb.org/gpsd/)
 * InfluxDB (https://www.influxdata.com/)
 * Python
@@ -21,32 +21,21 @@ This script can be run as a daemon to collect information from a GPS and push it
 # Optional
 * Grafana for visualizing the data (https://grafana.com/)
 
-# Todo
-- [ ] Create Docker Image
-- [x] Re-write script in Python (done but needs testing)
+# To do
+- [x] Develop bash script to write data to Influxdb using new API curl method and topology (org, bucket, token)
 
 # Installation
 ## InfluxDB
-Installation instructions for InfluxDB: https://docs.influxdata.com/influxdb/v1.7/introduction/installation/
+Installation instructions for InfluxDB: https://docs.influxdata.com/influxdb/v2.3/install/
 
-Once you have Influx installed, then run the following commands to create a database for gpsd:
-```
-influx
-CREATE DATABASE "gpsd"
-```
-
-If you only want to keep data for a specific number of days:
-```
-influx
-CREATE DATABASE "gpsd" WITH DURATION 30d
-```
+Once you have Influx installed, create your organization, a bucket and an API token:
 
 ## gpsd
 
 Debian based install
 ```
-apt-get update
-apt-get install -y gpsd
+apt update
+apt install -y gpsd
 ```
 
 Once it is intalled, make sure to edit */etc/default/gpsd* and change the *DEVICES* line to match the device for your GPS, ex:
@@ -62,6 +51,10 @@ USBAUTO="true"
 # Devices gpsd should collect to at boot time.
 # They need to be read/writeable, either by user gpsd or the group dialout.
 DEVICES="/dev/ttyUSB0"
+
+# If using a serial GPS
+DEVICES="dev/ttyAMA0"
+USBAUTOR"false"
 
 # Other options you want to pass to gpsd
 GPSD_OPTIONS=""
@@ -88,16 +81,20 @@ On the TPV line you should see your latitude and longitude displayed.
 Now that gpsd is installed and working, you can install the script.
 
 ```
-git clone https://github.com/mzac/gpsd-influx.git /opt/gpsd-influx
+git clone -b dev-influxv2 https://github.com/cdaher78/gpsd-influx.git /opt/gpsd-influx
 chmod a+x /opt/gpsd-influx/gpsd-influx.sh
 ```
 
 Edit the script and make sure to change the variables at the top to match your configuration:
 ```
-# Your InfluxDB Server
-influx_url="http://influx.lab.local:8086"
-# Your InfluxDB Database
-influx_db="gpsd"
+# Your Influxdb Server
+INFLUX_URL="Your Influxdb Server"
+# Your Influxdb Organization
+YOUR_ORG="Your Influxdb Organization"
+# Your Influxdb Bucket
+YOUR_BUCKET="Your Influxdb Bucket"
+# Your API Token
+YOUR_API_TOKEN="Your API Token"
 # Number of seconds between updates
 update_interval=10
 ```
@@ -141,13 +138,6 @@ gpsd,host=pi-gpsd,device="/dev/ttyUSB0",tpv=mode value=3
 gpsd,host=pi-gpsd,device="/dev/ttyUSB0",tpv=speed value=0.0
 gpsd,host=pi-gpsd,device="/dev/ttyUSB0",tpv=track value=0.0
 --------------------------------------------------------------------------------
-HTTP/1.1 204 No Content
-Content-Type: application/json
-Request-Id: 04355c63-7a44-11e9-9970-0242ac130002
-X-Influxdb-Build: OSS
-X-Influxdb-Version: 1.7.6
-X-Request-Id: 04355c63-7a44-11e9-9970-0242ac130002
-Date: Sun, 19 May 2019 14:40:15 GMT
 
 ```
 If you didn't get any errors you should be good to go to setup the script to run as a daemon.
@@ -164,6 +154,9 @@ ExecStart=/opt/gpsd-influx/gpsd-influx.sh
 KillMode=process
 Restart=on-failure
 User=root
+
+StandardOutput=append:/var/log/gpsd-influx.log
+StandardError=append:/var/log/gpsd-influx.log
 
 [Install]
 WantedBy=multi-user.target
