@@ -1,13 +1,9 @@
 #!/bin/bash
 
-# Your Influxdb Server
-INFLUX_URL="http://192.168.7.53:8086"
-# Your Influxdb Organization
-YOUR_ORG="wls-lab"
-# Your Influxdb Bucket
-YOUR_BUCKET="gpsd"
-# Your API Token
-YOUR_API_TOKEN="qgL8U79lYsZcoTEbj487peHclA8QjWmZDZqwHPnMcqxgCCRRej01Zg2LWiF6IrfWT1in_oPkQDQGXGrNq5Fv4w=="
+# Your InfluxDB Server
+influx_url="http://192.168.7.54:8086"
+# Your InfluxDB Database
+influx_db="gpsd"
 # Number of seconds between updates
 update_interval=10
 
@@ -37,16 +33,16 @@ gpsd_lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 gpsd_lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 gpsd_mode=$(echo "$tpv" | grep "mode" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 gpsd_speed=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
-#gpsd_track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+gpsd_track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 
 gpsd_hostname=$(hostname)
 
 if [ ! -z "$gpsd_lat" -a ! -z "$gpsd_lon" -a ! -z "$gpsd_alt" ]; then
 
     temp_data=$(mktemp /tmp/gpsd.XXXXXXXXX)
-
-    # https://docs.influxdata.com/influxdb/v2.3/write-data/developer-tools/api/
-
+    
+    # https://docs.influxdata.com/influxdb/v1.7/guides/writing_data/
+    
     echo "gpsd,host=$gpsd_hostname,device="$gpsd_device",tpv=alt value=$gpsd_alt" >> $temp_data
     echo "gpsd,host=$gpsd_hostname,device="$gpsd_device",tpv=climb value=$gpsd_climb" >> $temp_data
     echo "gpsd,host=$gpsd_hostname,device="$gpsd_device",tpv=epc value=$gpsd_epc" >> $temp_data
@@ -59,9 +55,9 @@ if [ ! -z "$gpsd_lat" -a ! -z "$gpsd_lon" -a ! -z "$gpsd_alt" ]; then
     echo "gpsd,host=$gpsd_hostname,device="$gpsd_device",tpv=lon value=$gpsd_lon" >> $temp_data
     echo "gpsd,host=$gpsd_hostname,device="$gpsd_device",tpv=mode value=$gpsd_mode" >> $temp_data
     echo "gpsd,host=$gpsd_hostname,device="$gpsd_device",tpv=speed value=$gpsd_speed" >> $temp_data
- #   echo "gpsd,host=$gpsd_hostname,device="$gpsd_device",tpv=track value=$gpsd_track" >> $temp_data
+    echo "gpsd,host=$gpsd_hostname,device="$gpsd_device",tpv=track value=$gpsd_track" >> $temp_data
 
-    if [ "$debug_output -eq 1" ]; then
+    if [ $debug_output -eq 1 ]; then
         echo "--------------------------------------------------------------------------------"
         echo "TPV"
         echo "$tpv"
@@ -71,23 +67,16 @@ if [ ! -z "$gpsd_lat" -a ! -z "$gpsd_lon" -a ! -z "$gpsd_alt" ]; then
         echo "--------------------------------------------------------------------------------"
     fi
 
-	curl_result() {
-	 curl -s -i --request POST \
-	 "${INFLUX_URL}/api/v2/write?org=${YOUR_ORG}&bucket=${YOUR_BUCKET}&precision=ns" \
-	 --header "Authorization: Token ${YOUR_API_TOKEN}" \
-	 --header "Content-Type: text/plain; charset=utf-8" \
-	 --header "Accept: application/json" \
-	 --data-binary @$temp_data
-	}
+    curl_result=$(curl -s -i -XPOST "$influx_url/write?db=$influx_db" --data-binary @$temp_data)
 
-    if [ "$debug_output -eq 1" ]; then
+    if [ $debug_output -eq 1 ]; then
         echo "$curl_result"
     fi
 
     rm -f $temp_data
-
+    
 else
-    if [ "$debug_output -eq 1" ]; then
+    if [ $debug_output -eq 1 ]; then
         echo "No GPS Fix - Not Sending Update"
         echo $tpv
         echo "--------------------------------------------------------------------------------"
@@ -112,7 +101,7 @@ unset gpsd_lon
 unset gpsd_mode
 unset gpsd_speed
 unset gpsd_time
-#unset gpsd_track
+unset gpsd_track
 
 unset ns_timestamp
 unset temp_data
