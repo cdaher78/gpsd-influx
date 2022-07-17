@@ -12,8 +12,8 @@ This script can be run as a daemon to collect information from a GPS and push it
 * GPS on Raspberry Pi: http://wiki.dragino.com/index.php?title=Getting_GPS_to_work_on_Raspberry_Pi_3_Model_B
 
 # Requirements
-* A serial GPS
-* A dedicated computer to run the daemon on (using a Raspberry Pi 4B)
+* A serial or USB GPS
+* A dedicated computer to run the daemon on (I'm using a Raspberry Pi 4B and a serial GPS on GPIO ports)
 * gpsd (http://www.catb.org/gpsd/)
 * InfluxDB (https://www.influxdata.com/)
 * Python
