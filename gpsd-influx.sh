@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Your Influxdb Server
-INFLUX_URL="http://192.168.7.53:8086"
+INFLUX_URL="YOUR INFLUX URL"
 # Your Influxdb Organization
-YOUR_ORG="wls-lab"
+YOUR_ORG="YOUR ORG"
 # Your Influxdb Bucket
-YOUR_BUCKET="gpsd"
+YOUR_BUCKET="YOUR BUCKET"
 # Your API Token
-YOUR_API_TOKEN="3DDMDkc5o3L1UwFmxLrd7vtzXNeWAxNxAGeoaVNHsLrjjQgbaugBCVYNRIdBcpX95ANtHEDYRSHgJZ2BfkdFfw=="
+YOUR_API_TOKEN="YOUR API TOKEN"
 # Number of seconds between updates
 update_interval=10
 
@@ -39,7 +39,7 @@ gpsd_lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 gpsd_lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 gpsd_mode=$(echo "$tpv" | grep "mode" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 gpsd_speed=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
-gpsd_track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+#gpsd_track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 
 gpsd_hostname=$(hostname)
 
