@@ -1,7 +1,7 @@
 # Introduction
 This script can be run as a daemon to collect information from a GPS and push it into an Influx Database.  This can be useful for tracking or for monitoring GPS drift.
 
-![grafana dashboard](https://github.com/cdaher78/gpsd-influx/grafana.png)
+![grafana dashboard](https://github.com/cdaher78/gpsd-influx/tree/dev-influxv2/grafana.png)
 
 * Grafana Dashboard: https://grafana.com/dashboards/10226
 * Dashboard Source: https://github.com/mzac/gpsd-influx/blob/master/gpsd-1558277406816.json
