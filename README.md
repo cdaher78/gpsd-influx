@@ -11,7 +11,7 @@ This script can be run as a daemon to collect information from a GPS and push it
 
 # Requirements
 * A serial or USB GPS
-* A dedicated computer to run the daemon on (I'm using a Raspberry Pi 4B and a serial GPS on GPIO ports)
+* A dedicated computer to run the daemon on (I'm using a Raspberry Pi 4B and a serial GPS)
 * gpsd (https://gpsd.gitlab.io/gpsd/)
 * InfluxDB (https://www.influxdata.com/)
 
