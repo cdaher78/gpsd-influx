@@ -1,28 +1,22 @@
 # Introduction
 This script can be run as a daemon to collect information from a GPS and push it into an Influx Database.  This can be useful for tracking or for monitoring GPS drift.
 
-![grafana dashboard](https://github.com/cdaher78/gpsd-influx/tree/dev-influxv2/grafana.png)
+![grafana dashboard](https://github.com/cdaher78/gpsd-influx/blob/dev-influxv2/grafana.png)
 
-* Grafana Dashboard: https://grafana.com/dashboards/10226
-* Dashboard Source: https://github.com/mzac/gpsd-influx/blob/master/gpsd-1558277406816.json
-
+* Dashboard Source: https://github.com/cdaher78/gpsd-influx/blob/dev-influxv2/gpsd-dashboard.json
 # Reference
-* JSON output of gpspipe: http://catb.org/gpsd/gpsd_json.html
+* JSON output of gpspipe: https://gpsd.gitlab.io/gpsd/gpsd_json.html
 
-* GPS on Raspberry Pi: http://wiki.dragino.com/index.php?title=Getting_GPS_to_work_on_Raspberry_Pi_3_Model_B
+* GPS on Raspberry Pi: https://maker.pro/raspberry-pi/tutorial/how-to-use-a-gps-receiver-with-raspberry-pi-4
 
 # Requirements
 * A serial or USB GPS
 * A dedicated computer to run the daemon on (I'm using a Raspberry Pi 4B and a serial GPS on GPIO ports)
-* gpsd (http://www.catb.org/gpsd/)
+* gpsd (https://gpsd.gitlab.io/gpsd/)
 * InfluxDB (https://www.influxdata.com/)
-* Python
 
 # Optional
 * Grafana for visualizing the data (https://grafana.com/)
-
-# To do
-- [x] Develop bash script to write data to Influxdb using new API curl method and topology (org, bucket, token)
 
 # Installation
 ## InfluxDB
