@@ -1,7 +1,7 @@
 # Introduction
 This script can be run as a daemon to collect information from a GPS and push it into an Influx Database.  This can be useful for tracking or for monitoring GPS drift.
 
-![grafana dashboard](https://github.com/mzac/gpsd-influx/blob/master/gpsd-grafana.png)
+![grafana dashboard](https://github.com/cdaher78/gpsd-influx/grafana.png)
 
 * Grafana Dashboard: https://grafana.com/dashboards/10226
 * Dashboard Source: https://github.com/mzac/gpsd-influx/blob/master/gpsd-1558277406816.json
@@ -136,7 +136,6 @@ gpsd,host=pi-gpsd,device="/dev/ttyUSB0",tpv=lat value=45.xxxxxxxxx
 gpsd,host=pi-gpsd,device="/dev/ttyUSB0",tpv=lon value=-73.xxxxxxxxx
 gpsd,host=pi-gpsd,device="/dev/ttyUSB0",tpv=mode value=3
 gpsd,host=pi-gpsd,device="/dev/ttyUSB0",tpv=speed value=0.0
-gpsd,host=pi-gpsd,device="/dev/ttyUSB0",tpv=track value=0.0
 --------------------------------------------------------------------------------
 
 ```
